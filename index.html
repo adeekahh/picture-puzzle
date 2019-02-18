@@ -8,54 +8,51 @@
   </head>
   <body class="theBody">
     <style>
-      #container {
-        display: grid;
-        background-color: beige;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 5em;
-      }
+       #container,
+       #dropzone-container {
+         display: grid;
+         background-color: beige;
+       }
 
-      .piece {
-        outline: 0.5px solid grey;
-      }
+       #wrapper{
+           display: flex;
+           justify-content: space-around;
+           margin-top:5em;
+       }
 
-      #draggable {
-        width: 200px;
-        height: 20px;
-        text-align: center;
-        background: white;
-        position: absolute;
-      }
-      .dropzone {
-        width: 200px;
-        height: 20px;
-        background: blueviolet;
-        margin-bottom: 10px;
-        padding: 10px;
-      }
+       .piece {
+         outline: 0.5px solid grey;
+       }
+
+       /* #draggable {
+         width: 200px;
+         height: 20px;
+         text-align: center;
+         background: white;
+         position: absolute;
+       }*/
+      /* .dropzone {
+         width: 200px;
+         height: 20px;
+         background: blueviolet;
+         margin-bottom: 10px;
+         padding: 10px;*/
+       }
     </style>
     <input type="text" id="image-url" placeholder="Image Source URL" />
     <input type="text" class="x-number" class="x-input" placeholder="X" />
     <input type="text" class="y-number" class="y-input" placeholder="Y" />
-    <button id="make-puzzle-button">Make my puzzle</button>
-    <img src="" alt="" />
-    <div id="container"></div>
-    <div class="dropzone">
-      <div
-        id="draggable"
-        draggable="true"
-        ondragstart="event.dataTransfer.setData('text/plain',null)"
-      >
-        This div is draggable
-      </div>
+    <button id="make-puzzle-button" type="submit" onclick="scatterPieces();">
+      Make my puzzle
+    </button>
+    <div id="wrapper">
+      <img src="" alt="" />
+      <img src="https://picsum.photos/200" alt="" />
+      <div id="container"></div>
+      <div id="dropzone-container"></div>
     </div>
-    <div class="dropzone"></div>
-    <div class="dropzone"></div>
-    <div class="dropzone"></div>
     <script>
-      const imageAddress =
-        "https://cdn-image.foodandwine.com/sites/default/files/obama-hot-dog-fwx.jpg";
+      const imageAddress = "https://picsum.photos/200";
       document.addEventListener("DOMContentLoaded", startTheScript);
       function startTheScript() {
         document
@@ -70,14 +67,22 @@
         alert("THE IMAGE HAS LOADED");
       }
 
-      const numOfXPieces = 3;
-      const numOfYPieces = 3;
-      const container_width = 1024;
-      const container_height = 1024;
+      const numOfXPieces = 4;
+      const numOfYPieces = 4;
+      const container_width = 200;
+      const container_height = 200;
       document.querySelector(
         "#container"
       ).style.gridTemplateColumns = `repeat(${numOfXPieces}, 1fr)`;
+      document.querySelector(
+        "#dropzone-container"
+      ).style.gridTemplateColumns = `repeat(${numOfXPieces}, 1fr)`;
       document.querySelector("#container").style.width = `${container_width}px`;
+      document.querySelector(
+        "#dropzone-container"
+      ).style.width = `${container_width}px`;
+
+      //PUZZLE PIECES
       for (let y = 0; y < numOfYPieces; y++) {
         for (let x = 0; x < numOfXPieces; x++) {
           let piece = document.createElement("div");
@@ -85,12 +90,35 @@
           piece.style.width = container_width / numOfXPieces + "px";
           piece.style.backgroundImage = `url(${imageAddress})`;
           piece.style.backgroundPositionX =
-            (container_width / numOfXPieces) * x + "px";
+            (container_width / numOfXPieces) * -x + "px";
           piece.style.backgroundPositionY =
-            (container_height / numOfYPieces) * y + "px";
-          piece.textContent = `${x}${y}`;
+            (container_height / numOfYPieces) * -y + "px";
+          //piece.textContent = `${x}${y}`;
+          piece.dataset.id = `${x}${y}`;
           piece.classList.add("piece");
+          piece.id = "draggable";
+          piece.setAttribute("draggable", "true");
+          piece.setAttribute(
+            "ondragstart",
+            "event.dataTransfer.setData('text/plain',null)"
+          );
           document.querySelector("#container").appendChild(piece);
+        }
+      }
+
+      //PUZZLE DROP AREAS
+
+      for (let y = 0; y < numOfYPieces; y++) {
+        for (let x = 0; x < numOfXPieces; x++) {
+          let piece = document.createElement("div");
+          piece.style.height = container_height / numOfYPieces + "px";
+          piece.style.width = container_width / numOfXPieces + "px";
+          piece.dataset.id = `${x}${y}`;
+
+          // piece.textContent = `${x}${y}`;
+          piece.classList.add("dropzone");
+
+          document.querySelector("#dropzone-container").appendChild(piece);
         }
       }
 
@@ -130,6 +158,12 @@
           dragged.style.top = event.pageY + "px";
         }
       });
+
+      function scatterPieces() {
+        document.querySelectorAll(".").forEach(eachDot => {
+          eachDot.style.left = `${Math.random() * 500 + 250}px`;
+        });
+      }
     </script>
   </body>
 </html>
