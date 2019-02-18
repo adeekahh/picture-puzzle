@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Picture Puzzle</title>
   </head>
   <body class="theBody">
     <style>
@@ -43,9 +43,9 @@
        }*/
     </style>
     <input type="text" id="image-url" placeholder="Image Source URL" />
-    <input type="text" class="x-number" class="x-input" placeholder="X" />
-    <input type="text" class="y-number" class="y-input" placeholder="Y" />
-    <button id="make-puzzle-button" type="submit">
+    <input type="text" id="x-number" class="x-input" placeholder="X" />
+    <input type="text" id="y-number" class="y-input" placeholder="Y" />
+    <button id="make-puzzle-button" type="submit" onclick="">
       Make my puzzle
     </button>
     <div id="wrapper">
@@ -161,7 +161,7 @@
           dragged.style.top = event.target.style.top;
           counter++;
           if (counter == numOfXPieces * numOfYPieces) {
-            document.querySelector("#wrapper").style.backgroundColor = "green";
+            document.body.style.backgroundColor = "green";
           }
           console.log(counter);
         } else if (event.target.dataset.id !== dragged.dataset.id) {
